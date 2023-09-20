@@ -10,8 +10,13 @@
       }
     ],
     "env": {
-      "DATABASE_URL": "mysql://9cihopiig5sfn3i4m2bj:pscale_pw_azGnoBibBy3xTUzeATmfI8sKAYlL3wBjkSnxMlohhIb@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict",
-      "BUILD_COMMAND": "prisma generate && next build"
-    }
+      "DATABASE_URL": "mysql://your-database-username:your-database-password@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict"
+    },
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/app/$1"
+      }
+    ]
   }
   
