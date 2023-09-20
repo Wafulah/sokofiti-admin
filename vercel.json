@@ -6,12 +6,12 @@
         "use": "@vercel/node",
         "config": {
           "maxLambdaSize": "50mb"
-        },
-        "command": "prisma generate && next build"
+        }
       }
     ],
     "env": {
-      "DATABASE_URL": "mysql://9cihopiig5sfn3i4m2bj:pscale_pw_azGnoBibBy3xTUzeATmfI8sKAYlL3wBjkSnxMlohhIb@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict"
+      "DATABASE_URL": "mysql://9cihopiig5sfn3i4m2bj:pscale_pw_azGnoBibBy3xTUzeATmfI8sKAYlL3wBjkSnxMlohhIb@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict",
+      "BUILD_COMMAND": "prisma generate && next build"
     }
   }
   
