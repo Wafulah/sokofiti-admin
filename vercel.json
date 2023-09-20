@@ -10,7 +10,7 @@
       }
     ],
     "env": {
-      "DATABASE_URL": "mysql://your-database-username:your-database-password@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict"
+      "DATABASE_URL": "mysql://9cihopiig5sfn3i4m2bj:pscale_pw_azGnoBibBy3xTUzeATmfI8sKAYlL3wBjkSnxMlohhIb@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict"
     },
     "routes": [
       {
