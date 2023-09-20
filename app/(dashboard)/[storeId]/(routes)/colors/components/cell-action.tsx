@@ -2,7 +2,13 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+// import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import {
+  LuCopy as Copy ,
+  LuPencil as Edit ,
+  LuMoreHorizontal as MoreHorizontal ,
+  LuTrash2 as Trash ,
+} from "react-icons/lu";
 import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
