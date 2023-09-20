@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, PlusCircle, Store } from "lucide-react"
+import { LuCheck as Check, LuChevronsUpDown as ChevronsUpDown, LuPlusCircle as PlusCircle, LuStore as Store } from "react-icons/lu"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"

@@ -1,4 +1,4 @@
-import { CreditCard, DollarSign, Package } from "lucide-react";
+import { LuCreditCard as CreditCard, LuDollarSign as DollarSign,LuPackage as Package } from "react-icons/lu";
 
 import { Separator } from "@/components/ui/separator";
 import { Overview } from "@/components/overview";

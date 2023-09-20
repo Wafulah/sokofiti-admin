@@ -1,4 +1,4 @@
-import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react"
+import { LuCreditCard as CreditCard, LuLogOut as LogOut,LuPlusCircle as PlusCircle,LuSettings as Settings,LuUser as User } from "react-icons/lu"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"

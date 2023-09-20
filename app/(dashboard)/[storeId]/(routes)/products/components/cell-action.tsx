@@ -1,7 +1,12 @@
 "use client";
 
 import axios from "axios";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import {
+  LuCopy as Copy ,
+  LuPencil as Edit ,
+  LuMoreHorizontal as MoreHorizontal ,
+  LuTrash2 as Trash ,
+} from "react-icons/lu";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { LuPlus as Plus } from "react-icons/lu";
 import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";

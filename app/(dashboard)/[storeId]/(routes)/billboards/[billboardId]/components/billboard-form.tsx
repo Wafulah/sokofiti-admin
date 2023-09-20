@@ -6,7 +6,10 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
-import { Trash } from "lucide-react"
+import {
+  
+  LuTrash2 as Trash ,
+} from "react-icons/lu";
 import { Billboard } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 

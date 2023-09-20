@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { ImagePlus, Trash } from 'lucide-react';
+import {LuImagePlus as  ImagePlus, LuTrash2 as Trash } from 'react-icons/lu';
 
 interface ImageUploadProps {
   disabled?: boolean;
