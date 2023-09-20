@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "app",
+        "use": "@vercel/node",
+        "config": {
+          "maxLambdaSize": "50mb"
+        },
+        "build": {
+          "env": {
+            "DATABASE_URL": "DATABASE_URL='mysql://9cihopiig5sfn3i4m2bj:pscale_pw_azGnoBibBy3xTUzeATmfI8sKAYlL3wBjkSnxMlohhIb@aws.connect.psdb.cloud/sokofiti-admin?sslaccept=strict"
+          },
+          "command": "prisma generate && next build"
+        }
+      }
+    ]
+  }
+
+  
+  
+
+  
+  
+  
