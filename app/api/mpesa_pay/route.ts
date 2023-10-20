@@ -5,7 +5,7 @@ import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://sokofiti-store.vercel.app",
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
@@ -66,13 +66,10 @@ export async function POST(
     const session = MpesaPay("0710760872", amount);
     // If MpesaPay is successful, update the success URL
     const successUrl = `${process.env.FRONTEND_STORE_URL}/cart?success=1`;
-    return NextResponse.json({ url:successUrl }, { headers: corsHeaders });
+    return NextResponse.json({ url: successUrl }, { headers: corsHeaders });
   } catch (error) {
     // If there's an error, update the cancel URL
     const cancelUrl = `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`;
-    return NextResponse.json({ url:cancelUrl }, { headers: corsHeaders });
+    return NextResponse.json({ url: cancelUrl }, { headers: corsHeaders });
   }
- 
-
-
 }
