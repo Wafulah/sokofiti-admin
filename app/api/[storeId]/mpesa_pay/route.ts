@@ -18,7 +18,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productIds } = await req.json();
+  const { name, phoneNo, productIds } = await req.json();
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
@@ -63,7 +63,7 @@ export async function POST(
 
   try {
     // Call MpesaPay with the appropriate phone_number and amount
-    const response = await MpesaPay("254710760872", amount);
+    const response = await MpesaPay(phoneNo, amount);
     // If MpesaPay is successful, update the success URL
     const successUrl = `${process.env.FRONTEND_STORE_URL}/cart?success=1`;
     return NextResponse.json({ url: successUrl }, { headers: corsHeaders });
