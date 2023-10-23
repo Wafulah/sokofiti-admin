@@ -36,7 +36,7 @@ export async function POST(
   let amount = 0;
 
   products.forEach((product) => {
-    const unit_amount = product.price.toNumber() * 100; // Calculate the unit amount based on the price
+    const unit_amount = product.price.toNumber(); 
     const quantity = 1; // Set the quantity to 1
     const amount_count = unit_amount * quantity; // Calculate the total amount
     line_items.push({
