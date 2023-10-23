@@ -1,19 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { updateOrderAndProducts } from './components/db-operations';
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export default async function POST(req: Request, res: NextApiResponse) {
   console.log("intro");
   if (req.method === 'POST') {
     console.log("post");
     try {
-      const callbackData = req.body;
+      const data = await req.text(); // Parse the incoming data
+      const callbackData = JSON.parse(data);
+      
       // Process the M-Pesa callback data here
-      if (callbackData.stkCallback.ResultCode === 0) {
+      if (callbackData?.stkCallback?.ResultCode === 0) {
         // Transaction was successful, update your database
         console.log("success");
-        const orderId = callbackData.stkCallback.MerchantRequestID;
-        const phoneNumber = callbackData.stkCallback.PhoneNumber;
-        const transactionDate = callbackData.stkCallback.TransactionDate;
+        const orderId = callbackData?.stkCallback?.MerchantRequestID;
+        const phoneNumber = callbackData?.stkCallback?.PhoneNumber;
+        const transactionDate = callbackData?.stkCallback?.TransactionDate;
+
 
         // Use the database update function
         const dbUpdateResult = await updateOrderAndProducts(orderId, phoneNumber, transactionDate);
@@ -35,7 +38,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       } else {
         // Transaction was not successful
         // Handle failed transactions if needed
-         console.log("failed");
+        console.log("failed");
         // Respond to M-Pesa with a rejection acknowledgment
         res.status(200).json({
           ResponseCode: '1',
