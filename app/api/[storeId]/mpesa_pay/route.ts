@@ -73,3 +73,9 @@ export async function POST(
     return NextResponse.json({ url: cancelUrl }, { headers: corsHeaders });
   }
 }
+
+export function getMpesaPayData(req: Request) {
+  return req.json();
+}
+
+

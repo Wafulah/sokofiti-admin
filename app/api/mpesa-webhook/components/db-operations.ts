@@ -1,27 +1,34 @@
-import prismadb from '@/lib/prismadb';
+import prismadb from "@/lib/prismadb";
+import { getMpesaPayData } from "@/app/api/[storeId]/mpesa_pay/route";
 
-export async function updateOrderAndProducts(orderId: string, addressString: string, phone: string) {
+export async function updateOrderAndProducts(
+  orderId: string,
+  addressString: string,
+  phone: string,
+  req: Request
+) {
   try {
+    const { name, phoneNo, productIds } = await getMpesaPayData(req);
     const order = await prismadb.order.update({
       where: {
-        id: orderId,
+        id: productIds,
       },
       data: {
         isPaid: true,
-        address: addressString,
-        phone: phone || '',
+        address: name,
+        phone: phoneNo || "",
       },
       include: {
         orderItems: true,
       },
     });
 
-    const productIds = order.orderItems.map((orderItem) => orderItem.productId);
+    const productId = order.orderItems.map((orderItem) => orderItem.productId);
 
     await prismadb.product.updateMany({
       where: {
         id: {
-          in: productIds,
+          in: productId,
         },
       },
       data: {
@@ -31,7 +38,7 @@ export async function updateOrderAndProducts(orderId: string, addressString: str
 
     return true; // Successful database update
   } catch (error) {
-    console.error('Error updating the database:', error);
+    console.error("Error updating the database:", error);
     return false; // Database update failed
   }
 }
