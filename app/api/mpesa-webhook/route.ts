@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { updateOrderAndProducts } from './components/db-operations';
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log("intro");
   if (req.method === 'POST') {
     console.log("post");
