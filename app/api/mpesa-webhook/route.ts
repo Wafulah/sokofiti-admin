@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { updateOrderAndProducts } from "./components/db-operations";
 
-async function handler (req: Request, res: NextApiResponse) {
+export async function POST(req: Request, res: NextApiResponse) {
   console.log("intro");
   if (req.method === "POST") {
     console.log("post");
@@ -61,4 +61,3 @@ async function handler (req: Request, res: NextApiResponse) {
   }
 };
 
-export default handler;
