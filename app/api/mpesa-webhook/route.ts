@@ -1,17 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { updateOrderAndProducts } from "./components/db-operations";
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  
+export async function POST(
+  req: Request | NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "POST") {
-    
     try {
-      const callbackData = req.body;
+      const callbackData =
+        "body" in req ? req.body : (req as NextApiRequest).body;
 
       // Process the M-Pesa callback data here
       if (callbackData?.stkCallback?.ResultCode === 0) {
         // Transaction was successful, update your database
-        
+
         const orderId = callbackData?.stkCallback?.MerchantRequestID;
         const phoneNumber = callbackData?.stkCallback?.PhoneNumber;
         const transactionDate = callbackData?.stkCallback?.TransactionDate;
@@ -21,7 +23,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
           orderId,
           phoneNumber,
           transactionDate,
-          req
+          req as NextApiRequest
         );
 
         if (dbUpdateResult) {
@@ -41,7 +43,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       } else {
         // Transaction was not successful
         // Handle failed transactions if needed
-        
+
         // Respond to M-Pesa with a rejection acknowledgment
         res.status(200).json({
           ResponseCode: "1",
@@ -59,5 +61,4 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Return a 405 Method Not Allowed response for non-POST requests
     res.status(405).end();
   }
-};
-
+}
