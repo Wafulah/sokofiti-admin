@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
 
-import { paymentDataStore } from "@/providers/store";
 import { updatePaymentData } from "@/providers/store-update";
 
 const corsHeaders = {
