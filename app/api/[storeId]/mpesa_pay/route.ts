@@ -68,8 +68,8 @@ export async function POST(
                 id: productId,
               },
             },
-          }),
-        },
+          })),
+        }, // <- Add a closing parenthesis here
       },
     });
 
