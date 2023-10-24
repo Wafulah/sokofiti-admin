@@ -24,7 +24,7 @@ export async function POST(
 
     // Dispatch an action to update the store
     store.dispatch({
-      type: 'UPDATE_PAYMENT_DATA',
+      type: "UPDATE_PAYMENT_DATA",
       payload: {
         name,
         phoneNo,
@@ -73,16 +73,21 @@ export async function POST(
       },
     });
 
+    // Call MpesaPay with the appropriate phone_number and amount
     try {
-      // Call MpesaPay with the appropriate phone_number and amount
       const response = await MpesaPay(phoneNo, amount);
+
       // If MpesaPay is successful, update the success URL
       const successUrl = `${process.env.FRONTEND_STORE_URL}/cart?success=1`;
       return NextResponse.json({ url: successUrl }, { headers: corsHeaders });
     } catch (error) {
-      // If there's an error, update the cancel URL
+      // Handle MpesaPay specific error, e.g., log the error, etc.
+      // Provide a cancel URL for MpesaPay failure
       const cancelUrl = `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`;
       return NextResponse.json({ url: cancelUrl }, { headers: corsHeaders });
     }
+  } catch (error) {
+    // Handle the error and potentially return an error response
+    return new NextResponse("An error occurred", { status: 500 });
   }
 }
