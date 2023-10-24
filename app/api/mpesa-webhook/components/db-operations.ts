@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 
-import { paymentDataStore } from "@/providers/store";
+import { useSelector } from 'react-redux';
 
 // You can also subscribe to changes if needed
 
@@ -10,13 +10,9 @@ export async function updateOrderAndProducts(
   phone: string
 ) {
   try {
-    // Use useSnapshot to access the snapshot of paymentDataStore
-    const snapshot = paymentDataStore;
-
-    // Access the data from the snapshot
-    const name = snapshot.name;
-    const phoneNo = snapshot.phoneNo;
-    const productIds = snapshot.productIds;
+    const name = useSelector((state) => state.name);
+const phoneNo = useSelector((state) => state.phoneNo);
+const productIds = useSelector((state) => state.productIds);
     for (const prodId of productIds) {
       const order = await prismadb.order.update({
         where: {
