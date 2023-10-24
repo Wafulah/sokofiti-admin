@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { updateOrderAndProducts } from "./components/db-operations";
 
-export async function POST(req: Request, res: NextApiResponse) {
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
   
   if (req.method === "POST") {
     
