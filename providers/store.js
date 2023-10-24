@@ -1,3 +1,4 @@
+"use client"
 // store.js
 import { proxy } from 'valtio';
 
