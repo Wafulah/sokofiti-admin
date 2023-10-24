@@ -1,11 +1,15 @@
 import prismadb from "@/lib/prismadb";
+
+import { NextApiRequest } from 'next';
+
 import { getMpesaPayData } from "@/app/api/[storeId]/mpesa_pay/route";
+
 
 export async function updateOrderAndProducts(
   orderId: string,
   addressString: string,
   phone: string,
-  req: Request
+  req: NextApiRequest
 ) {
   try {
     const { name, phoneNo, productIds } = await getMpesaPayData(req);

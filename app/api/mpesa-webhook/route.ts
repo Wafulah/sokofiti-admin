@@ -6,8 +6,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     
     try {
-      const data = await req.text(); // Parse the incoming data
-      const callbackData = JSON.parse(data);
+      const callbackData = req.body;
 
       // Process the M-Pesa callback data here
       if (callbackData?.stkCallback?.ResultCode === 0) {

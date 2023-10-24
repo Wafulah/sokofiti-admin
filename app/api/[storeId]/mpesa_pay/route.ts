@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
+import { NextApiRequest } from 'next';
 
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
@@ -14,11 +15,14 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
+
+
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
   const { name, phoneNo, productIds } = await req.json();
+  
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
@@ -36,11 +40,11 @@ export async function POST(
   let amount = 0;
 
   products.forEach((product) => {
-    const unit_amount = product.price.toNumber(); 
+    const unit_amount = product.price.toNumber();
     const quantity = 1; // Set the quantity to 1
     const amount_count = unit_amount * quantity; // Calculate the total amount
     line_items.push({
-      amount: amount,
+      amount: amount_count,
     });
     amount += amount_count;
   });
@@ -56,7 +60,8 @@ export async function POST(
               id: productId,
             },
           },
-        })),
+        }),
+        ),
       },
     },
   });
@@ -74,8 +79,11 @@ export async function POST(
   }
 }
 
-export function getMpesaPayData(req: Request) {
-  return req.json();
+export async function getMpesaPayData(req: NextApiRequest) {
+  try {
+    const { name, phoneNo, productIds } = await req.body;
+    return { name, phoneNo, productIds };
+  } catch (error) {
+    throw new Error('Error parsing JSON data from the request body');
+  }
 }
-
-
