@@ -1,9 +1,7 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
-
 import store from "@/providers/store";
 
 const corsHeaders = {
@@ -20,20 +18,19 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const StoreData = await req.json();
-  const { name, phoneNo, productIds } = StoreData;
-  
-  
-// Dispatch an action to update the store
-store.dispatch({
-  type: 'UPDATE_PAYMENT_DATA',
-  payload: {
-    name,
-    phoneNo,
-    productIds,
-  },
-});
+  try {
+    const StoreData = await req.json();
+    const { name, phoneNo, productIds } = StoreData;
 
+    // Dispatch an action to update the store
+    store.dispatch({
+      type: 'UPDATE_PAYMENT_DATA',
+      payload: {
+        name,
+        phoneNo,
+        productIds,
+      },
+    });
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
   }

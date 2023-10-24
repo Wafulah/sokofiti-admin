@@ -1,4 +1,4 @@
-// store.js
+// store.ts
 import { createStore } from 'redux';
 
 // Define an initial state

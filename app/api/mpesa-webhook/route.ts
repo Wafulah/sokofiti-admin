@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { updateOrderAndProducts } from "./components/db-operations";
+import { useOrderAndProductUpdater } from "./components/db-operations";
 
 export async function POST(req: Request, res: NextApiResponse) {
   if (req.method === "POST") {
@@ -14,7 +14,8 @@ export async function POST(req: Request, res: NextApiResponse) {
         const phoneNumber = callbackData?.stkCallback?.PhoneNumber;
         const transactionDate = callbackData?.stkCallback?.TransactionDate;
 
-        // Use the database update function
+        // Use the custom hook to update orders and products
+        const updateOrderAndProducts = useOrderAndProductUpdater();
         const dbUpdateResult = await updateOrderAndProducts(
           orderId,
           phoneNumber,
