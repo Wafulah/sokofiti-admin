@@ -21,9 +21,9 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { name, phoneNo, productIds } = await req.json();
-   const StoreData = await req.json();
-   // Function to update the payment data
+  const StoreData = await req.json();
+  const { name, phoneNo, productIds } = StoreData;
+  // Function to update the payment data
 
   // Inside your route handler:
   // After receiving payment data, update the store
