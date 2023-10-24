@@ -4,7 +4,7 @@ import { useOrderAndProductUpdater } from "./components/db-operations";
 // Define a type for the M-Pesa callback data
 type MpesaCallbackData = {
   stkCallback: {
-    ResultCode: number;
+    ResultCode: string;
     MerchantRequestID: string;
     PhoneNumber: string;
     TransactionDate: string;
@@ -18,7 +18,7 @@ function MpesaCallbackHandler(
 ) {
   const updateOrderAndProducts = useOrderAndProductUpdater();
 
-  if (callbackData.stkCallback?.ResultCode === 0) {
+  if (callbackData.stkCallback?.ResultCode === "0") {
     const orderId = callbackData.stkCallback.MerchantRequestID;
     const phoneNumber = callbackData.stkCallback.PhoneNumber;
     const transactionDate = callbackData.stkCallback.TransactionDate;
@@ -53,10 +53,7 @@ function MpesaCallbackHandler(
   }
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
       const callbackData = req.body as MpesaCallbackData;
