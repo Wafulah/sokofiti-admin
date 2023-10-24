@@ -1,10 +1,18 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import prismadb from "@/lib/prismadb";
+
+interface AppState {
+  name: string;
+  phoneNo: string;
+  productIds: string[];
+}
 
 // Your custom hook for updating orders and products
 export const useOrderAndProductUpdater = () => {
-  const name = useSelector((state) => state.name);
-  const phoneNo = useSelector((state) => state.phoneNo);
-  const productIds = useSelector((state) => state.productIds);
+  const name = useSelector((state: AppState) => state.name);
+  const phoneNo = useSelector((state: AppState) => state.phoneNo);
+  const productIds = useSelector((state: AppState) => state.productIds);
   const dispatch = useDispatch();
 
   const updateOrderAndProducts = useCallback(async () => {
@@ -17,7 +25,7 @@ export const useOrderAndProductUpdater = () => {
           data: {
             isPaid: true,
             address: name,
-            phone: phoneNo || '',
+            phone: phoneNo || "",
           },
           include: {
             orderItems: true,
@@ -42,7 +50,7 @@ export const useOrderAndProductUpdater = () => {
 
       // Dispatch an action to update the Redux store
       dispatch({
-        type: 'UPDATE_PAYMENT_DATA',
+        type: "UPDATE_PAYMENT_DATA",
         payload: {
           name,
           phoneNo,
@@ -52,7 +60,7 @@ export const useOrderAndProductUpdater = () => {
 
       return true; // Successful database update
     } catch (error) {
-      console.error('Error updating the database:', error);
+      console.error("Error updating the database:", error);
       return false; // Database update failed
     }
   }, [productIds, name, phoneNo, dispatch]);

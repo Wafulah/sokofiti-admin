@@ -1,51 +1,66 @@
-import { NextApiResponse } from "next";
+import { NextApiResponse, NextApiRequest } from "next";
 import { useOrderAndProductUpdater } from "./components/db-operations";
 
-export async function POST(req: Request, res: NextApiResponse) {
-  if (req.method === "POST") {
-    try {
-      const callbackData = await req.json();
+// Define a type for the M-Pesa callback data
+type MpesaCallbackData = {
+  stkCallback: {
+    ResultCode: number;
+    MerchantRequestID: string;
+    PhoneNumber: string;
+    TransactionDate: string;
+  };
+};
 
-      // Process the M-Pesa callback data here
-      if (callbackData?.stkCallback?.ResultCode === 0) {
-        // Transaction was successful, update your database
+// Create a functional component that uses the hook
+function MpesaCallbackHandler(
+  callbackData: MpesaCallbackData,
+  res: NextApiResponse
+) {
+  const updateOrderAndProducts = useOrderAndProductUpdater();
 
-        const orderId = callbackData?.stkCallback?.MerchantRequestID;
-        const phoneNumber = callbackData?.stkCallback?.PhoneNumber;
-        const transactionDate = callbackData?.stkCallback?.TransactionDate;
+  if (callbackData.stkCallback?.ResultCode === 0) {
+    const orderId = callbackData.stkCallback.MerchantRequestID;
+    const phoneNumber = callbackData.stkCallback.PhoneNumber;
+    const transactionDate = callbackData.stkCallback.TransactionDate;
 
-        // Use the custom hook to update orders and products
-        const updateOrderAndProducts = useOrderAndProductUpdater();
-        const dbUpdateResult = await updateOrderAndProducts(
-          orderId,
-          phoneNumber,
-          transactionDate
-        );
-
+    updateOrderAndProducts()
+      .then((dbUpdateResult: boolean) => {
+        // Assuming dbUpdateResult is of type boolean
         if (dbUpdateResult) {
-          // Respond to M-Pesa with a success acknowledgment
           res.status(200).json({
             ResponseCode: "0",
             ResponseDesc: "Transaction processed successfully",
           });
         } else {
-          // Database update failed
-          // Respond to M-Pesa with an error acknowledgment
           res.status(200).json({
             ResponseCode: "1",
             ResponseDesc: "Transaction processed, but database update failed",
           });
         }
-      } else {
-        // Transaction was not successful
-        // Handle failed transactions if needed
-
-        // Respond to M-Pesa with a rejection acknowledgment
-        res.status(200).json({
-          ResponseCode: "1",
-          ResponseDesc: "Transaction failed",
+      })
+      .catch((error: Error) => {
+        console.error("Error processing M-Pesa callback:", error);
+        res.status(500).json({
+          ResponseCode: "2",
+          ResponseDesc: "Error processing the transaction",
         });
-      }
+      });
+  } else {
+    res.status(200).json({
+      ResponseCode: "1",
+      ResponseDesc: "Transaction failed",
+    });
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === "POST") {
+    try {
+      const callbackData = req.body as MpesaCallbackData;
+      MpesaCallbackHandler(callbackData, res);
     } catch (error) {
       console.error("Error processing M-Pesa callback:", error);
       res.status(500).json({
@@ -54,7 +69,6 @@ export async function POST(req: Request, res: NextApiResponse) {
       });
     }
   } else {
-    // Return a 405 Method Not Allowed response for non-POST requests
     res.status(405).end();
   }
 }
