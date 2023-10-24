@@ -1,14 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { updateOrderAndProducts } from "./components/db-operations";
 
-export async function POST(
-  req: Request | NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: Request, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
-      const callbackData =
-        "body" in req ? req.body : (req as NextApiRequest).body;
+      const callbackData = await req.json();
 
       // Process the M-Pesa callback data here
       if (callbackData?.stkCallback?.ResultCode === 0) {
@@ -22,8 +18,7 @@ export async function POST(
         const dbUpdateResult = await updateOrderAndProducts(
           orderId,
           phoneNumber,
-          transactionDate,
-          req as NextApiRequest
+          transactionDate
         );
 
         if (dbUpdateResult) {

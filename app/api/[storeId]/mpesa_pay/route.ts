@@ -1,9 +1,10 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-import { NextApiRequest } from 'next';
 
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
+
+import { paymentDataStore, updatePaymentData } from "@/providers/store";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,14 +16,18 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-
-
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
   const { name, phoneNo, productIds } = await req.json();
-  
+  // Inside your route handler:
+  // After receiving payment data, update the store
+  updatePaymentData({
+    name: name,
+    phoneNo: phoneNo,
+    productIds: productIds,
+  });
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
@@ -60,8 +65,7 @@ export async function POST(
               id: productId,
             },
           },
-        }),
-        ),
+        })),
       },
     },
   });
@@ -76,14 +80,5 @@ export async function POST(
     // If there's an error, update the cancel URL
     const cancelUrl = `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`;
     return NextResponse.json({ url: cancelUrl }, { headers: corsHeaders });
-  }
-}
-
-export async function getMpesaPayData(req: NextApiRequest) {
-  try {
-    const { name, phoneNo, productIds } = await req.body;
-    return { name, phoneNo, productIds };
-  } catch (error) {
-    throw new Error('Error parsing JSON data from the request body');
   }
 }

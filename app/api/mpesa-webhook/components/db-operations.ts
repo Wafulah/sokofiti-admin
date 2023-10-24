@@ -1,31 +1,34 @@
 import prismadb from "@/lib/prismadb";
 
-import { NextApiRequest } from 'next';
+import { paymentDataStore } from "@/providers/store";
 
-import { getMpesaPayData } from "@/app/api/[storeId]/mpesa_pay/route";
-
+// You can also subscribe to changes if needed
 
 export async function updateOrderAndProducts(
   orderId: string,
   addressString: string,
-  phone: string,
-  req: NextApiRequest
+  phone: string
 ) {
   try {
-    const { name, phoneNo, productIds } = await getMpesaPayData(req);
-    const order = await prismadb.order.update({
-      where: {
-        id: productIds,
-      },
-      data: {
-        isPaid: true,
-        address: name,
-        phone: phoneNo || "",
-      },
-      include: {
-        orderItems: true,
-      },
-    });
+    // Access the data like this
+    const name = paymentDataStore.name;
+    const phoneNo = paymentDataStore.phoneNo;
+    const productIds = paymentDataStore.productIds;
+    for (const prodId of productIds) {
+      const order = await prismadb.order.update({
+        where: {
+          id: prodId, // Use the current orderId in the loop
+        },
+        data: {
+          isPaid: true,
+          address: name,
+          phone: phoneNo || "",
+        },
+        include: {
+          orderItems: true,
+        },
+      });
+    
 
     const productId = order.orderItems.map((orderItem) => orderItem.productId);
 
@@ -39,6 +42,7 @@ export async function updateOrderAndProducts(
         isArchived: true,
       },
     });
+  }
 
     return true; // Successful database update
   } catch (error) {
