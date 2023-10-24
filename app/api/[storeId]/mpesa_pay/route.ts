@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
 
-import { paymentDataStore, updatePaymentData } from "@/providers/store";
+import { paymentDataStore } from "@/providers/store";
+import { updatePaymentData } from "@/providers/store-update";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,13 +22,12 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   const { name, phoneNo, productIds } = await req.json();
+   const StoreData = await req.json();
+   // Function to update the payment data
+
   // Inside your route handler:
   // After receiving payment data, update the store
-  updatePaymentData({
-    name: name,
-    phoneNo: phoneNo,
-    productIds: productIds,
-  });
+  updatePaymentData(StoreData);
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });

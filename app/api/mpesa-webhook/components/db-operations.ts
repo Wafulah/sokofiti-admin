@@ -10,10 +10,13 @@ export async function updateOrderAndProducts(
   phone: string
 ) {
   try {
-    // Access the data like this
-    const name = paymentDataStore.name;
-    const phoneNo = paymentDataStore.phoneNo;
-    const productIds = paymentDataStore.productIds;
+    // Use useSnapshot to access the snapshot of paymentDataStore
+    const snapshot = paymentDataStore;
+
+    // Access the data from the snapshot
+    const name = snapshot.name;
+    const phoneNo = snapshot.phoneNo;
+    const productIds = snapshot.productIds;
     for (const prodId of productIds) {
       const order = await prismadb.order.update({
         where: {
@@ -28,21 +31,22 @@ export async function updateOrderAndProducts(
           orderItems: true,
         },
       });
-    
 
-    const productId = order.orderItems.map((orderItem) => orderItem.productId);
+      const productId = order.orderItems.map(
+        (orderItem) => orderItem.productId
+      );
 
-    await prismadb.product.updateMany({
-      where: {
-        id: {
-          in: productId,
+      await prismadb.product.updateMany({
+        where: {
+          id: {
+            in: productId,
+          },
         },
-      },
-      data: {
-        isArchived: true,
-      },
-    });
-  }
+        data: {
+          isArchived: true,
+        },
+      });
+    }
 
     return true; // Successful database update
   } catch (error) {
