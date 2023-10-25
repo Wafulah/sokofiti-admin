@@ -1,5 +1,5 @@
-import { NextApiResponse, NextApiRequest } from "next";
 import { useOrderAndProductUpdater } from "./components/db-operations";
+import { NextApiResponse, Request } from "next";
 
 // Define a type for the M-Pesa callback data
 type MpesaCallbackData = {
@@ -12,7 +12,7 @@ type MpesaCallbackData = {
 };
 
 // Create a functional component that uses the hook
-function MpesaCallbackHandler(
+async function MpesaCallbackHandler(
   callbackData: MpesaCallbackData,
   res: NextApiResponse
 ) {
@@ -23,30 +23,29 @@ function MpesaCallbackHandler(
     const phoneNumber = callbackData.stkCallback.PhoneNumber;
     const transactionDate = callbackData.stkCallback.TransactionDate;
 
-    updateOrderAndProducts()
-      .then((dbUpdateResult: boolean) => {
-        // Assuming dbUpdateResult is of type boolean
-        if (dbUpdateResult) {
-          res.status(200).json({
-            ResponseCode: "0",
-            ResponseDesc: "Transaction processed successfully",
-          });
-        } else {
-          res.status(200).json({
-            ResponseCode: "1",
-            ResponseDesc: "Transaction processed, but database update failed",
-          });
-        }
-      })
-      .catch((error: Error) => {
-        console.error("Error processing M-Pesa callback:", error);
-        res.status(500).json({
-          ResponseCode: "2",
-          ResponseDesc: "Error processing the transaction",
+    try {
+      const dbUpdateResult = await updateOrderAndProducts();
+
+      if (dbUpdateResult) {
+        res.json({
+          ResponseCode: "0",
+          ResponseDesc: "Transaction processed successfully",
         });
+      } else {
+        res.json({
+          ResponseCode: "1",
+          ResponseDesc: "Transaction processed, but database update failed",
+        });
+      }
+    } catch (error) {
+      console.error("Error processing M-Pesa callback:", error);
+      res.json({
+        ResponseCode: "2",
+        ResponseDesc: "Error processing the transaction",
       });
+    }
   } else {
-    res.status(200).json({
+    res.json({
       ResponseCode: "1",
       ResponseDesc: "Transaction failed",
     });
@@ -62,26 +61,23 @@ export async function POST(req: Request, res: NextApiResponse) {
         const callbackData = rawData as MpesaCallbackData;
 
         // Rest of your code remains the same
-        MpesaCallbackHandler(callbackData, res);
+        await MpesaCallbackHandler(callbackData, res);
       } else {
         // Handle cases where rawData is null or ResultCode is not "0"
-        res.status(200).json({
+        res.json({
           ResponseCode: "1",
           ResponseDesc: "Transaction failed",
         });
       }
     } catch (error) {
       console.error("Error processing M-Pesa callback:", error);
-      res.status(500).json({
+      res.json({
         ResponseCode: "2",
         ResponseDesc: "Error processing the transaction",
       });
     }
   } else {
-    res.status(405).end();
+    res.statusCode = 405;
+    res.end();
   }
 }
-
-
-
-
