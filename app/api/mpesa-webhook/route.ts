@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { NextApiResponse } from "next";
 import { useOrderAndProductUpdater } from "./components/db-operations";
 
@@ -14,29 +16,33 @@ type MpesaCallbackData = {
 // Create a functional component that uses the hook
 function MpesaCallbackHandler(callbackData: MpesaCallbackData) {
   const updateOrderAndProducts = useOrderAndProductUpdater();
+  const [response, setResponse] = useState<{ ResponseCode: string; ResponseDesc: string } | undefined>(undefined);
 
-  if (callbackData.stkCallback?.ResultCode === "0") {
-    const orderId = callbackData.stkCallback.MerchantRequestID;
-    const phoneNumber = callbackData.stkCallback.PhoneNumber;
-    const transactionDate = callbackData.stkCallback.TransactionDate;
-
-    updateOrderAndProducts()
-      .then((dbUpdateResult: boolean) => {
-        // Assuming dbUpdateResult is of type boolean
-        if (dbUpdateResult) {
-          return { ResponseCode: "0", ResponseDesc: "Transaction processed successfully" };
-        } else {
-          return { ResponseCode: "1", ResponseDesc: "Transaction processed, but database update failed" };
+  useEffect(() => {
+    const processCallback = async () => {
+      if (callbackData.stkCallback?.ResultCode === "0") {
+        try {
+          const dbUpdateResult: boolean = await updateOrderAndProducts();
+          if (dbUpdateResult) {
+            setResponse({ ResponseCode: "0", ResponseDesc: "Transaction processed successfully" });
+          } else {
+            setResponse({ ResponseCode: "1", ResponseDesc: "Transaction processed, but database update failed" });
+          }
+        } catch (error) {
+          console.error("Error processing M-Pesa callback:", error);
+          setResponse({ ResponseCode: "2", ResponseDesc: "Error processing the transaction" });
         }
-      })
-      .catch((error: Error) => {
-        console.error("Error processing M-Pesa callback:", error);
-        return { ResponseCode: "2", ResponseDesc: "Error processing the transaction" };
-      });
-  } else {
-    return { ResponseCode: "1", ResponseDesc: "Transaction failed" };
-  }
+      } else {
+        setResponse({ ResponseCode: "1", ResponseDesc: "Transaction failed" });
+      }
+    };
+
+    processCallback();
+  }, [callbackData, updateOrderAndProducts]);
+
+  return response;
 }
+
 
 
 export async function POST(req: Request, res: NextApiResponse): Promise<{ ResponseCode: string; ResponseDesc: string } | undefined> {
