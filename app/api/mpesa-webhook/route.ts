@@ -38,7 +38,8 @@ function MpesaCallbackHandler(callbackData: MpesaCallbackData) {
   }
 }
 
-export async function POST(req: Request, res: NextApiResponse) {
+
+export async function POST(req: Request, res: NextApiResponse): Promise<{ ResponseCode: string; ResponseDesc: string } | undefined> {
   if (req.method === "POST") {
     try {
       const rawData = req.body as MpesaCallbackData | null;
@@ -47,22 +48,20 @@ export async function POST(req: Request, res: NextApiResponse) {
         const callbackData = rawData as MpesaCallbackData;
 
         const response = await MpesaCallbackHandler(callbackData);
-        res.status(200).json(response);
+        return response;
       } else {
         // Handle cases where rawData is null or ResultCode is not "0"
-        res.status(200).json({
-          ResponseCode: "1",
-          ResponseDesc: "Transaction failed",
-        });
+        return { ResponseCode: "1", ResponseDesc: "Transaction failed" };
       }
     } catch (error) {
       console.error("Error processing M-Pesa callback:", error);
-      res.status(500).json({
-        ResponseCode: "2",
-        ResponseDesc: "Error processing the transaction",
-      });
+      return { ResponseCode: "2", ResponseDesc: "Error processing the transaction" };
     }
   } else {
-    res.status(405).end();
+    // Handle all requests other than POST requests
+    return { ResponseCode: "1", ResponseDesc: "Method Not Allowed" };
   }
 }
+
+
+
