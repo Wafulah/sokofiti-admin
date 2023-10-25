@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import MpesaPay from "@/lib/mpesa_lib";
 import prismadb from "@/lib/prismadb";
-import store from "@/providers/store";
+import { updatePaymentData } from "@/providers/store";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,13 +23,10 @@ export async function POST(
     const { name, phoneNo, productIds } = StoreData;
 
     // Dispatch an action to update the store
-    store.dispatch({
-      type: "UPDATE_PAYMENT_DATA",
-      payload: {
-        name,
-        phoneNo,
-        productIds,
-      },
+    updatePaymentData({
+      name,
+      phoneNo,
+      productIds,
     });
 
     if (!productIds || productIds.length === 0) {
