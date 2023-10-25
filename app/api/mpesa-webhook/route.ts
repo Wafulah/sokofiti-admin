@@ -16,36 +16,26 @@ type MpesaCallbackData = {
 // Create a functional component that uses the hook
 function MpesaCallbackHandler(callbackData: MpesaCallbackData) {
   const updateOrderAndProducts = useOrderAndProductUpdater();
-  const [response, setResponse] = useState<{ ResponseCode: string; ResponseDesc: string } | undefined>(undefined);
 
-  useEffect(() => {
-    const processCallback = async () => {
-      if (callbackData.stkCallback?.ResultCode === "0") {
-        try {
-          const dbUpdateResult: boolean = await updateOrderAndProducts();
-          if (dbUpdateResult) {
-            setResponse({ ResponseCode: "0", ResponseDesc: "Transaction processed successfully" });
-          } else {
-            setResponse({ ResponseCode: "1", ResponseDesc: "Transaction processed, but database update failed" });
-          }
-        } catch (error) {
-          console.error("Error processing M-Pesa callback:", error);
-          setResponse({ ResponseCode: "2", ResponseDesc: "Error processing the transaction" });
-        }
-      } else {
-        setResponse({ ResponseCode: "1", ResponseDesc: "Transaction failed" });
-      }
-    };
-
-    processCallback();
-  }, [callbackData, updateOrderAndProducts]);
-
-  return response;
+  if (callbackData.stkCallback?.ResultCode === "0") {
+    try {
+      const dbUpdateResult: Promise<boolean> = updateOrderAndProducts();
+    } catch (error) {
+      console.error("Error processing M-Pesa callback:", error);
+      return {
+        ResponseCode: "2",
+        ResponseDesc: "Error processing the transaction",
+      };
+    }
+  } else {
+    return { ResponseCode: "1", ResponseDesc: "Transaction failed" };
+  }
 }
 
-
-
-export async function POST(req: Request, res: NextApiResponse): Promise<{ ResponseCode: string; ResponseDesc: string } | undefined> {
+export async function POST(
+  req: Request,
+  res: NextApiResponse
+): Promise<{ ResponseCode: string; ResponseDesc: string } | undefined> {
   if (req.method === "POST") {
     try {
       const rawData = req.body as MpesaCallbackData | null;
@@ -61,13 +51,13 @@ export async function POST(req: Request, res: NextApiResponse): Promise<{ Respon
       }
     } catch (error) {
       console.error("Error processing M-Pesa callback:", error);
-      return { ResponseCode: "2", ResponseDesc: "Error processing the transaction" };
+      return {
+        ResponseCode: "2",
+        ResponseDesc: "Error processing the transaction",
+      };
     }
   } else {
     // Handle all requests other than POST requests
     return { ResponseCode: "1", ResponseDesc: "Method Not Allowed" };
   }
 }
-
-
-
