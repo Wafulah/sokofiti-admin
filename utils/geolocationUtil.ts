@@ -1,10 +1,11 @@
+"use client"
 type Position = {
     coords: {
       latitude: number;
       longitude: number;
     };
   };
-  
+
 export function getPosition(): Promise<Position | null> {
     return new Promise((resolve) => {
       if (navigator.geolocation) {
