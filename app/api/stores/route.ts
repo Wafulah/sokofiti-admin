@@ -48,7 +48,7 @@ export async function GET(req: Request, res: Response) {
   try {
     const stores = await prismadb.store.findMany();
 
-    return new NextResponse.json(stores, { headers: corsHeaders });
+    return NextResponse.json(stores, { headers: corsHeaders });
   } catch (error) {
     console.error('[STORES_GET]', error);
     return new NextResponse("Internal error", { status: 500 });
