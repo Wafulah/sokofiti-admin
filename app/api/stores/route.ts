@@ -33,3 +33,14 @@ export async function POST(
     return new NextResponse("Internal error", { status: 500 });
   }
 };
+
+export async function GET() {
+  try {
+    const stores = await prismadb.store.findMany();
+
+    return NextResponse.json(stores);
+  } catch (error) {
+    console.error('[STORES_GET]', error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
