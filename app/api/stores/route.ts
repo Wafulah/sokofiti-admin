@@ -35,12 +35,12 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     // Parse query parameters for bounds (southwest and northeast)
-    const searchParams = {
+    const searchParams = new URLSearchParams({
       swLat: "-1.0",
       swLng: "2.0",
       neLat: "3.0",
       neLng: "4.0",
-    };
+    });
 
     const swLat = parseFloat(searchParams.get("swLat") || "0");
     const swLng = parseFloat(searchParams.get("swLng") || "0");
