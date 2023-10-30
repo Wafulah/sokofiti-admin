@@ -6,14 +6,7 @@ import { formatter } from "@/lib/utils";
 import { ProductsClient } from "./components/client";
 import { ProductColumn } from "./components/columns";
 
-import { getLocationAndUpdateStore } from "@/utils/locationUtil";
-
 const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-  try {
-    await getLocationAndUpdateStore(params.storeId);
-  } catch (error) {
-    console.error(error);
-  }
   const products = await prismadb.product.findMany({
     where: {
       storeId: params.storeId,
