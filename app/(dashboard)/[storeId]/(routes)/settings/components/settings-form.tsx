@@ -132,72 +132,70 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                       placeholder="Store name"
                       {...field}
                     />
-                    <FormField
-                      control={form.control}
-                      name="latitude"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                          <div className="space-y-0.5">
-                            <FormLabel className="text-base">
-                              Location
-                            </FormLabel>
-                            <FormDescription>
-                              Flip Switch to Update your location
-                            </FormDescription>
-                          </div>
-                          <FormControl>
-                            <Switch
-                              checked={
-                                field.value !== null ? !!field.value : false
-                              }
-                              onCheckedChange={async (checked) => {
-                                field.onChange(checked ? 1 : 0); // Update the switch state
-
-                                if (checked) {
-                                  // If the switch is turned on, get the user's location
-                                  if (navigator.geolocation) {
-                                    try {
-                                      const position: Position =
-                                        await new Promise<Position>(
-                                          (resolve, reject) => {
-                                            navigator.geolocation.getCurrentPosition(
-                                              (position) => resolve(position),
-                                              (error) => reject(error)
-                                            );
-                                          }
-                                        );
-
-                                      const userLatitude: number =
-                                        position.coords.latitude;
-                                      const userLongitude: number =
-                                        position.coords.longitude;
-
-                                      // Update the form data with the new latitude and longitude
-                                      form.setValue("latitude", userLatitude);
-                                      form.setValue("longitude", userLongitude);
-                                      toast.success("Location Updated Successfully");
-                                    } catch (error: any) {
-                                      toast.error("Error obtaining geolocation:");
-                                      console.error(
-                                        "Error obtaining geolocation:",
-                                        error
-                                      );
-                                    }
-                                  } else {
-                                    toast.error("Geolocation is not supported by your browser.");
-                                    console.error(
-                                      "Geolocation is not supported by your browser."
-                                    );
-                                  }
-                                }
-                              }}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="latitude"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Location</FormLabel>
+                    <FormDescription>
+                      Flip Switch to Update your location
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value !== null ? !!field.value : false}
+                      onCheckedChange={async (checked) => {
+                        field.onChange(checked ? 1 : 0); // Update the switch state
+
+                        if (checked) {
+                          // If the switch is turned on, get the user's location
+                          if (navigator.geolocation) {
+                            try {
+                              const position: Position =
+                                await new Promise<Position>(
+                                  (resolve, reject) => {
+                                    navigator.geolocation.getCurrentPosition(
+                                      (position) => resolve(position),
+                                      (error) => reject(error)
+                                    );
+                                  }
+                                );
+
+                              const userLatitude: number =
+                                position.coords.latitude;
+                              const userLongitude: number =
+                                position.coords.longitude;
+
+                              // Update the form data with the new latitude and longitude
+                              form.setValue("latitude", userLatitude);
+                              form.setValue("longitude", userLongitude);
+                              toast.success("Location Updated Successfully");
+                            } catch (error: any) {
+                              toast.error("Error obtaining geolocation:");
+                              console.error(
+                                "Error obtaining geolocation:",
+                                error
+                              );
+                            }
+                          } else {
+                            toast.error(
+                              "Geolocation is not supported by your browser."
+                            );
+                            console.error(
+                              "Geolocation is not supported by your browser."
+                            );
+                          }
+                        }
+                      }}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
