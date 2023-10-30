@@ -38,30 +38,9 @@ export async function GET(req: Request) {
   try {
     // Parse query parameters for bounds (southwest and northeast)
     const { searchParams } = new URL(req.url);
-    const swLat = parseFloat(searchParams.get('swLat') || '0');
-    const swLng = parseFloat(searchParams.get('swLng') || '0');
-    const neLat = parseFloat(searchParams.get('neLat') || '0');
-    const neLng = parseFloat(searchParams.get('neLng') || '0');
 
-    if (isNaN(swLat) || isNaN(swLng) || isNaN(neLat) || isNaN(neLng)) {
-      return new NextResponse("Invalid bounds", { status: 400 });
-    }
 
-    // Fetch stores within the specified boundary
-    const stores = await prismadb.store.findMany({
-      where: {
-        latitude: {
-          gte: swLat, // Greater than or equal to southwest latitude
-          lte: neLat, // Less than or equal to northeast latitude
-        },
-        longitude: {
-          gte: swLng, // Greater than or equal to southwest longitude
-          lte: neLng, // Less than or equal to northeast longitude
-        },
-      },
-    });
-
-    return NextResponse.json(stores);
+    return NextResponse.json(searchParams);
   } catch (error) {
     console.error('[STORES_GET]', error);
     return new NextResponse("Internal error", { status: 500 });
