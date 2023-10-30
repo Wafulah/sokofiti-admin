@@ -175,13 +175,16 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                                       // Update the form data with the new latitude and longitude
                                       form.setValue("latitude", userLatitude);
                                       form.setValue("longitude", userLongitude);
+                                      toast.success("Location Updated Successfully");
                                     } catch (error: any) {
+                                      toast.error("Error obtaining geolocation:");
                                       console.error(
                                         "Error obtaining geolocation:",
                                         error
                                       );
                                     }
                                   } else {
+                                    toast.error("Geolocation is not supported by your browser.");
                                     console.error(
                                       "Geolocation is not supported by your browser."
                                     );
