@@ -34,11 +34,21 @@ export async function POST(
   }
 };
 
-export async function GET() {
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS(req: Request, res: Response) {
+  return new NextResponse(null, { headers: corsHeaders });
+}
+
+export async function GET(req: Request, res: Response) {
   try {
     const stores = await prismadb.store.findMany();
 
-    return NextResponse.json(stores);
+    return new NextResponse.json(stores, { headers: corsHeaders });
   } catch (error) {
     console.error('[STORES_GET]', error);
     return new NextResponse("Internal error", { status: 500 });
