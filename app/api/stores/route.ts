@@ -38,10 +38,10 @@ export async function GET(req: Request) {
   try {
     // Parse query parameters for bounds (southwest and northeast)
     const { searchParams } = new URL(req.url);
-    const swLat = parseFloat(searchParams.get('swLat'));
-    const swLng = parseFloat(searchParams.get('swLng'));
-    const neLat = parseFloat(searchParams.get('neLat'));
-    const neLng = parseFloat(searchParams.get('neLng'));
+    const swLat = parseFloat(searchParams.get('swLat') || '0');
+    const swLng = parseFloat(searchParams.get('swLng') || '0');
+    const neLat = parseFloat(searchParams.get('neLat') || '0');
+    const neLng = parseFloat(searchParams.get('neLng') || '0');
 
     if (isNaN(swLat) || isNaN(swLng) || isNaN(neLat) || isNaN(neLng)) {
       return new NextResponse("Invalid bounds", { status: 400 });
