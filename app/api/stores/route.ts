@@ -34,7 +34,7 @@ export async function POST(
   }
 };
 
-export async function GET(req) {
+export async function GET(req: Request) {
   try {
     // Parse query parameters for bounds (southwest and northeast)
     const { searchParams } = new URL(req.url);
