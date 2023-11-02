@@ -14,7 +14,7 @@ const corsHeaders = {
   }
   
 
-export async function GET(req: NextApiRequest, res: Response) {
+  export default async function handler(req: NextApiRequest, res: Response) {
     const { size, color, category } = req.query;
   
     try {
