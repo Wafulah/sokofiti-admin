@@ -27,31 +27,31 @@ export async function GET(req: Request, res: Response) {
       // Fetch products based on size, color, and category
       products = await prismadb.product.findMany({
         where: {
-            sizeId: size as string,
-            colorId: color as string,
-            categoryId: categoryId as string,
+          sizeId: size as string,
+          colorId: color as string,
+          categoryId: categoryId as string,
         },
       });
     } else if (size && color) {
       // Fetch products based on size and color
       products = await prismadb.product.findMany({
         where: {
-            sizeId: size as string,
-            colorId: color as string,
+          sizeId: size as string,
+          colorId: color as string,
         },
       });
     } else if (categoryId) {
       // Fetch products based on category
       products = await prismadb.product.findMany({
         where: {
-            categoryId: categoryId as string,
+          categoryId: categoryId as string,
         },
       });
     } else {
       // Fetch all products if no parameters are specified
       products = await prismadb.product.findMany();
     }
-    
+
     return NextResponse.json(products, { headers: corsHeaders });
   } catch (error) {
     console.error("[ALL_PRODUCTS_GET]", error);
