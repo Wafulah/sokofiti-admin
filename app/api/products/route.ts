@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { NextApiRequest } from "next";
+
 import { parse } from "url";
 
 import prismadb from "@/lib/prismadb";
@@ -23,34 +23,10 @@ export async function GET(req: Request, res: Response) {
   try {
     let products;
 
-    if (size && color && category) {
-      // Fetch products based on size, color, and category
-      products = await prismadb.product.findMany({
-        where: {
-          size: { name: size as string },
-          color: { name: color as string },
-          category: { name: category as string },
-        },
-      });
-    } else if (size && color) {
-      // Fetch products based on size and color
-      products = await prismadb.product.findMany({
-        where: {
-          size: { name: size as string },
-          color: { name: color as string },
-        },
-      });
-    } else if (category) {
-      // Fetch products based on category
-      products = await prismadb.product.findMany({
-        where: {
-          category: { name: category as string },
-        },
-      });
-    } else {
+    
       // Fetch all products if no parameters are specified
       products = await prismadb.product.findMany();
-    }
+    
 
     return NextResponse.json(products, { headers: corsHeaders });
   } catch (error) {
