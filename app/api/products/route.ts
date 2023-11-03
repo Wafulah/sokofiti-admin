@@ -27,24 +27,24 @@ export async function GET(req: Request, res: Response) {
       // Fetch products based on size, color, and category
       products = await prismadb.product.findMany({
         where: {
-          size: { name: size as string },
-          color: { name: color as string },
-          category: { name: category as string },
+            sizeId: size as string,
+            colorId: color as string,
+            categoryId: category as string,
         },
       });
     } else if (size && color) {
       // Fetch products based on size and color
       products = await prismadb.product.findMany({
         where: {
-          size: { name: size as string },
-          color: { name: color as string },
+            sizeId: size as string,
+            colorId: color as string,
         },
       });
     } else if (category) {
       // Fetch products based on category
       products = await prismadb.product.findMany({
         where: {
-          category: { name: category as string },
+            categoryId: category as string,
         },
       });
     } else {
