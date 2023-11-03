@@ -18,18 +18,18 @@ export async function GET(req: Request, res: Response) {
   const { query } = parse(req.url, true);
 
   // Now you can access query parameters
-  const { size, color, category } = query;
+  const { categoryId, color, size } = query;
 
   try {
     let products;
 
-    if (size && color && category) {
+    if (size && color && categoryId) {
       // Fetch products based on size, color, and category
       products = await prismadb.product.findMany({
         where: {
             sizeId: size as string,
             colorId: color as string,
-            categoryId: category as string,
+            categoryId: categoryId as string,
         },
       });
     } else if (size && color) {
@@ -40,11 +40,11 @@ export async function GET(req: Request, res: Response) {
             colorId: color as string,
         },
       });
-    } else if (category) {
+    } else if (categoryId) {
       // Fetch products based on category
       products = await prismadb.product.findMany({
         where: {
-            categoryId: category as string,
+            categoryId: categoryId as string,
         },
       });
     } else {
@@ -56,7 +56,7 @@ export async function GET(req: Request, res: Response) {
     product.push(query);
     return NextResponse.json(product, { headers: corsHeaders });
   } catch (error) {
-    console.error("[PRODUCTS_GET]", error);
+    console.error("[ALL_PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
