@@ -23,12 +23,10 @@ export async function GET(req: Request, res: Response) {
   try {
     let products;
 
-    
-      // Fetch all products if no parameters are specified
-      products = await prismadb.product.findMany();
-    
+    // Fetch all products if no parameters are specified
+    products = await prismadb.product.findMany();
 
-    return NextResponse.json(products, { headers: corsHeaders });
+    return NextResponse.json(products, { headers: corsHeaders }), query;
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
