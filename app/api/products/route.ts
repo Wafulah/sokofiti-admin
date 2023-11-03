@@ -31,6 +31,9 @@ export async function GET(req: Request, res: Response) {
           colorId: color as string,
           categoryId: categoryId as string,
         },
+        include: {
+          images: true, // Include related images
+        },
       });
     } else if (size && color) {
       // Fetch products based on size and color
@@ -39,6 +42,9 @@ export async function GET(req: Request, res: Response) {
           sizeId: size as string,
           colorId: color as string,
         },
+        include: {
+          images: true, // Include related images
+        },
       });
     } else if (categoryId) {
       // Fetch products based on category
@@ -46,10 +52,17 @@ export async function GET(req: Request, res: Response) {
         where: {
           categoryId: categoryId as string,
         },
+        include: {
+          images: true, // Include related images
+        },
       });
     } else {
       // Fetch all products if no parameters are specified
-      products = await prismadb.product.findMany();
+      products = await prismadb.product.findMany({
+        include: {
+          images: true, // Include related images
+        },
+      });
     }
 
     return NextResponse.json(products, { headers: corsHeaders });
