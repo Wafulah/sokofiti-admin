@@ -51,10 +51,8 @@ export async function GET(req: Request, res: Response) {
       // Fetch all products if no parameters are specified
       products = await prismadb.product.findMany();
     }
-    let product = [];
-    product.push(products);
-    product.push(query);
-    return NextResponse.json(product, { headers: corsHeaders });
+    
+    return NextResponse.json(products, { headers: corsHeaders });
   } catch (error) {
     console.error("[ALL_PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
