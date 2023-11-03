@@ -54,7 +54,7 @@ export async function GET(req: Request, res: Response) {
     let product = [];
     product.push(products);
     product.push(query);
-    return NextResponse.json(products, { headers: corsHeaders });
+    return NextResponse.json(product, { headers: corsHeaders });
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
