@@ -70,7 +70,7 @@ export async function GET(req: Request) {
   try {
     const categories = await prismadb.category.findMany();
 
-    return NextResponse.json(categories);
+    return NextResponse.json(categories, { headers: corsHeaders });
   } catch (error) {
     console.log("[ALL_CATEGORIES_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
