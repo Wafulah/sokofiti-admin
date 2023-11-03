@@ -33,6 +33,8 @@ export async function GET(req: Request, res: Response) {
         },
         include: {
           images: true, // Include related images
+          size:true,
+          color:true,
         },
       });
     } else if (size && color) {
@@ -44,6 +46,8 @@ export async function GET(req: Request, res: Response) {
         },
         include: {
           images: true, // Include related images
+          size:true,
+          color:true,
         },
       });
     } else if (categoryId) {
@@ -54,6 +58,8 @@ export async function GET(req: Request, res: Response) {
         },
         include: {
           images: true, // Include related images
+          size:true,
+          color:true,
         },
       });
     } else {
@@ -61,6 +67,8 @@ export async function GET(req: Request, res: Response) {
       products = await prismadb.product.findMany({
         include: {
           images: true, // Include related images
+          size:true,
+          color:true,
         },
       });
     }
