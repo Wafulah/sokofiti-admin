@@ -11,9 +11,7 @@ const CategoriesPage = async ({
   params: { storeId: string }
 }) => {
   const categories = await prismadb.category.findMany({
-    where: {
-      storeId: params.storeId
-    },
+
     include: {
       billboard: true,
     },
