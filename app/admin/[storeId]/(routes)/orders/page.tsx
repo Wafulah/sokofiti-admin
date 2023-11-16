@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-
+import { redirect } from 'next/navigation';
 import prismadb from "@/lib/prismadb";
 import { formatter } from "@/lib/utils";
 
@@ -7,6 +7,11 @@ import { OrderColumn } from "./components/columns";
 import { OrderClient } from "./components/client";
 
 const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
+ 
+  if (params.storeId !== process.env.NEXT_PUBLIC_ADMIN) {
+    redirect('/sign-in');
+  }
+  
   const orders = await prismadb.order.findMany({
     include: {
       orderItems: {

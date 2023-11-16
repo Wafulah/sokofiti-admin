@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-
+import { redirect } from 'next/navigation';
 import prismadb from "@/lib/prismadb";
 
 import { CategoryColumn } from "./components/columns"
@@ -10,6 +10,10 @@ const CategoriesPage = async ({
 }: {
   params: { storeId: string }
 }) => {
+  
+  if (params.storeId !== process.env.NEXT_PUBLIC_ADMIN) {
+    redirect('/sign-in');
+  }
   const categories = await prismadb.category.findMany({
 
     include: {

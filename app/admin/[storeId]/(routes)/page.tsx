@@ -4,6 +4,7 @@ import {
   LuPackage as Package,
 } from "react-icons/lu";
 
+
 import { Separator } from "@/components/ui/separator";
 import { Overview } from "@/components/overview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +20,7 @@ interface DashboardPageProps {
     storeId: string;
   };
 }
+
 
 const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const totalRevenue = await getTotalRevenue(params.storeId);

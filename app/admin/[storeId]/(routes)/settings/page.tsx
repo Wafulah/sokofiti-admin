@@ -12,6 +12,10 @@ const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
     redirect("/sign-in");
   }
 
+  if (params.storeId !== process.env.NEXT_PUBLIC_ADMIN) {
+    redirect("/sign-in");
+  }
+
   const store = await prismadb.store.findFirst({
     where: {
       id: params.storeId,
