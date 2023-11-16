@@ -8,11 +8,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-export async function OPTIONS(req, res) {
+export async function OPTIONS(req: Request, res: Response) {
   return new NextResponse(null, { headers: corsHeaders });
 }
 
-export async function GET(req, res) {
+export async function GET(req: Request, res: Response) {
   const { query } = parse(req.url, true);
 
   const { categoryId, color, size } = query;
