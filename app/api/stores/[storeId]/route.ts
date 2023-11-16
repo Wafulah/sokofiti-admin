@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
-
 export async function PATCH(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -31,7 +30,7 @@ export async function PATCH(
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
     };
-    
+
     const store = await prismadb.store.updateMany({
       where: {
         id: params.storeId,
@@ -39,14 +38,13 @@ export async function PATCH(
       },
       data: updateData,
     });
-  
+
     return NextResponse.json(store);
   } catch (error) {
-    console.log('[STORE_PATCH]', error);
+    console.log("[STORE_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-};
-
+}
 
 export async function DELETE(
   req: Request,
@@ -66,13 +64,49 @@ export async function DELETE(
     const store = await prismadb.store.deleteMany({
       where: {
         id: params.storeId,
-        userId
-      }
+        userId,
+      },
     });
-  
+
     return NextResponse.json(store);
   } catch (error) {
-    console.log('[STORE_DELETE]', error);
+    console.log("[STORE_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
+}
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
+
+export async function OPTIONS(req: Request, res: Response) {
+  return new NextResponse(null, { headers: corsHeaders });
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  try {
+    if (!params.storeId) {
+      return new NextResponse("Store id is required", { status: 400 });
+    }
+
+    const store = await prismadb.store.findUnique({
+      where: {
+        id: params.storeId,
+      },
+    });
+
+    if (!store) {
+      return new NextResponse("Store not found", { status: 404 });
+    }
+
+    return NextResponse.json(store, { headers: corsHeaders });
+  } catch (error) {
+    console.log("[SPECIFIC_STORE_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
