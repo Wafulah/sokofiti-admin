@@ -1,11 +1,18 @@
 import prismadb from "@/lib/prismadb";
 
+
+import { redirect } from 'next/navigation';
 interface GraphData {
   name: string;
   total: number;
 }
 
 export const getGraphRevenue = async (storeId: string): Promise<GraphData[]> => {
+  
+if (storeId !== process.env.NEXT_PUBLIC_ADMIN) {
+  redirect('/sign-in');
+}
+  
   const paidOrders = await prismadb.order.findMany({
     where: {
       
