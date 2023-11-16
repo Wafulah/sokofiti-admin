@@ -18,6 +18,7 @@ model Store {
   sizes           Size[]     @relation("StoreToSize")
   colors          Color[]     @relation("StoreToColor")
   orders          Order[]     @relation("StoreToOrder")
+  images          Image[]   // Relation to Image model
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   latitude        Float?   
@@ -133,9 +134,12 @@ model Image {
   id          String   @id @default(uuid())
   productId   String   // Foreign Key to Product
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId     String   // Foreign Key to Store
+  store       Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
   url         String   // URL of the image
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([productId])
+  @@index([storeId])
 }
