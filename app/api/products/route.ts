@@ -73,7 +73,7 @@ export async function GET(req: Request, res: Response) {
       });
     }
      
-    return NextResponse.json(query, { headers: corsHeaders });
+    return NextResponse.json(products, { headers: corsHeaders });
   } catch (error) {
     console.error("[ALL_PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
