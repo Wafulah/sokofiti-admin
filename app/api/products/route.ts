@@ -66,12 +66,8 @@ export async function GET(req: Request, res: Response) {
       });
     }
 
-    // Check if products exist before returning
-    if (products) {
       return NextResponse.json(products, { headers: corsHeaders });
-    } else {
-      return new NextResponse("No products found", { status: 404 });
-    }
+    
   } catch (error) {
     console.error("[ALL_PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
