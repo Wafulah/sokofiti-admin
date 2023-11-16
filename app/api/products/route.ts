@@ -73,7 +73,7 @@ export async function GET(req: Request, res: Response) {
       });
     }
      let product = [];
-     product.push(products);
+     
      product.push(query);
     return NextResponse.json(product, { headers: corsHeaders });
   } catch (error) {
