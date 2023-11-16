@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { LuTrash2 as Trash } from "react-icons/lu";
-import { Store } from "@prisma/client";
+import { Store, Image } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -39,7 +39,9 @@ const formSchema = z.object({
 type SettingsFormValues = z.infer<typeof formSchema>;
 
 interface SettingsFormProps {
-  initialData: Store;
+  initialData: Store & {
+    images: Image[];
+  };
 }
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
@@ -120,19 +122,25 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
-        > 
-         <FormField
+        >
+          <FormField
             control={form.control}
             name="images"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Images</FormLabel>
                 <FormControl>
-                  <ImageUpload 
-                    value={field.value.map((image) => image.url)} 
-                    disabled={loading} 
-                    onChange={(url) => field.onChange([...field.value, { url }])}
-                    onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
+                  <ImageUpload
+                    value={field.value.map((image) => image.url)}
+                    disabled={loading}
+                    onChange={(url) =>
+                      field.onChange([...field.value, { url }])
+                    }
+                    onRemove={(url) =>
+                      field.onChange([
+                        ...field.value.filter((current) => current.url !== url),
+                      ])
+                    }
                   />
                 </FormControl>
                 <FormMessage />
