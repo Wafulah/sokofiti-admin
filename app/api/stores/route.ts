@@ -49,6 +49,7 @@ export async function GET(req: Request, res: Response) {
     const stores = await prismadb.store.findMany({
       include: {
         images: true,
+        products: true,
       },
     });
 
