@@ -29,21 +29,33 @@ export async function PATCH(
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
       images: {
-        createMany: {
-          data: [
-            ...images.map((image: { url: string }) => image),
-          ],
-        },
+        deleteMany: {},
       },
     };
 
-    const store = await prismadb.store.updateMany({
+    await prismadb.store.updateMany({
       where: {
         id: params.storeId,
         userId,
       },
       data: updateData,
     });
+
+    const store = await prismadb.store.update({
+      where: {
+        id: params.storeId
+      },
+      data: {
+        images: {
+          createMany: {
+            data: [
+              ...images.map((image: { url: string }) => image),
+            ],
+          },
+        },
+      },
+    })
+
 
     return NextResponse.json(store);
   } catch (error) {
@@ -79,7 +91,7 @@ export async function DELETE(
     console.log("[STORE_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-}
+}  
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
