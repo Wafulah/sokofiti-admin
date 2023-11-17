@@ -121,10 +121,11 @@ export async function GET(
       },
       include: {
         images: true,
-        products:  {
+        products: {
           include: {
             images: true,
           },
+        },
       },
     });
 
