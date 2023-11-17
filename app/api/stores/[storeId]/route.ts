@@ -10,8 +10,7 @@ export async function PATCH(
   try {
     const { userId } = auth();
     const body = await req.json();
-
-    const { name, latitude, longitude } = body;
+    const { name, latitude, longitude, images } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -29,6 +28,9 @@ export async function PATCH(
       name,
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
+      images: {
+        set: images || [],
+      },
     };
 
     const store = await prismadb.store.updateMany({
