@@ -46,7 +46,11 @@ export async function OPTIONS(req: Request, res: Response) {
 
 export async function GET(req: Request, res: Response) {
   try {
-    const stores = await prismadb.store.findMany();
+    const stores = await prismadb.store.findMany({
+      include: {
+        images: true,
+      },
+    });
 
     return NextResponse.json(stores, { headers: corsHeaders });
   } catch (error) {

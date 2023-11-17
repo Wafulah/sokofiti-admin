@@ -33,11 +33,9 @@ export async function PATCH(
       },
     };
 
-
-
     await prismadb.store.update({
       where: {
-        id: params.storeId
+        id: params.storeId,
       },
       data: {
         name,
@@ -51,19 +49,16 @@ export async function PATCH(
 
     const store = await prismadb.store.update({
       where: {
-        id: params.storeId
+        id: params.storeId,
       },
       data: {
         images: {
           createMany: {
-            data: [
-              ...images.map((image: { url: string }) => image),
-            ],
+            data: [...images.map((image: { url: string }) => image)],
           },
         },
       },
-    })
-
+    });
 
     return NextResponse.json(store);
   } catch (error) {
@@ -99,7 +94,7 @@ export async function DELETE(
     console.log("[STORE_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-}  
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -123,6 +118,9 @@ export async function GET(
     const store = await prismadb.store.findUnique({
       where: {
         id: params.storeId,
+      },
+      include: {
+        images: true,
       },
     });
 
