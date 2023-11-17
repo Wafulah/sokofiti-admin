@@ -17,6 +17,9 @@ const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
       id: params.storeId,
       userId,
     },
+    include: {
+      images: true,
+    },
   });
 
   if (!store) {
