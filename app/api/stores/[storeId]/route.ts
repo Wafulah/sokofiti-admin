@@ -29,7 +29,11 @@ export async function PATCH(
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
       images: {
-        set: images || [],
+        createMany: {
+          data: [
+            ...images.map((image: { url: string }) => image),
+          ],
+        },
       },
     };
 
