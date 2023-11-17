@@ -33,26 +33,17 @@ export async function PATCH(
       },
     };
 
-    await prismadb.store.updateMany({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-      data: updateData,
-    });
+
 
     const store = await prismadb.store.update({
       where: {
         id: params.storeId
       },
       data: {
-        images: {
-          createMany: {
-            data: [
-              ...images.map((image: { url: string }) => image),
-            ],
-          },
-        },
+        name,
+        latitude: latitude !== null ? { set: latitude } : {},
+        longitude: longitude !== null ? { set: longitude } : {},
+        images: { set: images || [] }, 
       },
     })
 
