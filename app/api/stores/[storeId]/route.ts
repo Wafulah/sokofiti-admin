@@ -35,7 +35,7 @@ export async function PATCH(
 
 
 
-    const store = await prismadb.store.update({
+    await prismadb.store.update({
       where: {
         id: params.storeId
       },
@@ -43,7 +43,24 @@ export async function PATCH(
         name,
         latitude: latitude !== null ? { set: latitude } : {},
         longitude: longitude !== null ? { set: longitude } : {},
-        images: { set: images || [] }, 
+        images: {
+          deleteMany: {},
+        },
+      },
+    });
+
+    const store = await prismadb.store.update({
+      where: {
+        id: params.storeId
+      },
+      data: {
+        images: {
+          createMany: {
+            data: [
+              ...images.map((image: { url: string }) => image),
+            ],
+          },
+        },
       },
     })
 
