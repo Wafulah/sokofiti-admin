@@ -28,8 +28,7 @@ const ProductPage = async ({
   });
 
   if (!order) {
-    toast.success("Item not found");
-    redirect('/sign-in');
+     redirect('/sign-in');
   }
   
   const orderDetails: OrderCol = {
