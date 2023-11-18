@@ -15,6 +15,7 @@ const ProductPage = async ({
   const order = await prismadb.order.findUnique({
     where: {
       id: params.orderId,
+      storeId: params.storeId
     },include: {
       orderItems: {
         include: {
