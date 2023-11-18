@@ -41,38 +41,63 @@ export async function POST(
       },
     });
 
-    const line_items = [];
-    let amount = 0;
+// Initialize variables
+const lineItemsByStore: Record<string, { lineItems: { productId: string; amount: number }[]; storeAmount: number }> = {};
+let totalAmount = 0;
 
-    products.forEach((product) => {
-      const unit_amount = product.price.toNumber();
-      const quantity = 1; // Set the quantity to 1
-      const amount_count = unit_amount * quantity; // Calculate the total amount
-      line_items.push({
-        amount: amount_count,
-      });
-      amount += amount_count;
-    });
+// Iterate through products to calculate the total amount and group line items by storeId
+products.forEach((product) => {
+  const unitAmount = product.price.toNumber();
+  const quantity = 1; // Set the quantity to 1
+  const amountCount = unitAmount * quantity; // Calculate the total amount
 
-    const order = await prismadb.order.create({
-      data: {
-        storeId: params.storeId,
-        isPaid: false,
-        orderItems: {
-          create: productIds.map((productId: string) => ({
-            product: {
-              connect: {
-                id: productId,
-              },
+  // Group line items by storeId
+  if (!lineItemsByStore[product.storeId]) {
+    lineItemsByStore[product.storeId] = {
+      lineItems: [],
+      storeAmount: 0,
+    };
+  }
+
+  lineItemsByStore[product.storeId].lineItems.push({
+    productId: product.id,
+    amount: amountCount,
+  });
+
+  // Update store-specific amount
+  lineItemsByStore[product.storeId].storeAmount += amountCount;
+  totalAmount += amountCount; // Keep track of the total amount for all stores
+});
+
+// Create orders for each store
+const orderPromises = Object.entries(lineItemsByStore).map(async ([storeId, data]) => {
+  const { lineItems, storeAmount } = data;
+
+  const order = await prismadb.order.create({
+    data: {
+      storeId: storeId,
+      isPaid: false,
+      orderItems: {
+        create: lineItems.map((lineItem) => ({
+          product: {
+            connect: {
+              id: lineItem.productId,
             },
-          })),
-        }, // <- Add a closing parenthesis here
+          },
+        })),
       },
-    });
+    },
+  });
+
+});
+
+// Wait for all orders to be created
+await Promise.all(orderPromises);
+
 
     // Call MpesaPay with the appropriate phone_number and amount
     try {
-      const response = await MpesaPay(phoneNo, amount);
+      const response = await MpesaPay(phoneNo, totalAmount);
 
       // If MpesaPay is successful, update the success URL
       const successUrl = `${process.env.FRONTEND_STORE_URL}/cart?success=1`;
