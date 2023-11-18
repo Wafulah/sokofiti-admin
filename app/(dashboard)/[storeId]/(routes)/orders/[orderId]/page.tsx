@@ -1,7 +1,9 @@
+import { redirect } from 'next/navigation';
 import { format } from "date-fns";
 
 import prismadb from "@/lib/prismadb";
 
+import { toast } from "react-hot-toast"
 import { formatter } from "@/lib/utils";
 
 import { OrderCol } from "./components/columns"
@@ -24,6 +26,11 @@ const ProductPage = async ({
       }
     },
   });
+
+  if (!order) {
+    toast.success("Item not found");
+    redirect('/sign-in');
+  }
   
   const orderDetails: OrderCol = {
     id: order?.id ?? 'N/A',
