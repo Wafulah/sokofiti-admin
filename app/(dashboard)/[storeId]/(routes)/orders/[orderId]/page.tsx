@@ -3,7 +3,6 @@ import { format } from "date-fns";
 
 import prismadb from "@/lib/prismadb";
 
-import { toast } from "react-hot-toast"
 import { formatter } from "@/lib/utils";
 
 import { OrderCol } from "./components/columns"

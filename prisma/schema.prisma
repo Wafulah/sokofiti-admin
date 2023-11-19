@@ -12,6 +12,7 @@ model Store {
   id              String    @id @default(uuid())
   name            String
   userId          String
+  description     String?
   billboards      Billboard[] @relation("StoreToBillboard")
   categories      Category[] @relation("StoreToCategory")
   products        Product[]  @relation("StoreToProduct")
@@ -21,8 +22,8 @@ model Store {
   images          Image[]   // Relation to Image model
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
-  latitude        Float?   
-  longitude       Float? 
+  latitude        Decimal?   
+  longitude       Decimal? 
 }
 
 model Billboard {
@@ -61,6 +62,8 @@ model Product {
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
   price       Decimal
+  quantity    Int?
+  description String?
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
   sizeId      String    // Foreign Key to Size
