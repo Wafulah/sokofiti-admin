@@ -159,7 +159,7 @@ export async function PATCH(
       data: {
         name,
         price,
-        quantityAsInt,
+        quantity: quantityAsInt,
         description,
         categoryId,
         colorId,
