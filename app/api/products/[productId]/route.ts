@@ -88,7 +88,7 @@ export async function PATCH(
     const { userId } = auth();
 
     const body = await req.json();
-    console.log(body);
+    
     const {
       name,
       price,
@@ -122,7 +122,7 @@ export async function PATCH(
       return new NextResponse("Price is required", { status: 400 });
     }
     if (!quantity) {
-      return new NextResponse(`Quantity "${quantity}" is not a valid integer. Type: ${typeof quantity}`, { status: 400 });
+      return new NextResponse("Quantity is required", { status: 400 });
     }
     if (!description) {
       return new NextResponse("Description is required", { status: 400 });
