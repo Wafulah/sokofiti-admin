@@ -10,7 +10,7 @@ export async function PATCH(
   try {
     const { userId } = auth();
     const body = await req.json();
-    const { name, latitude, longitude, images } = body;
+    const { name, latitude, longitude, images, description } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -26,6 +26,7 @@ export async function PATCH(
 
     const updateData = {
       name,
+      description,
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
       images: {
@@ -39,6 +40,7 @@ export async function PATCH(
       },
       data: {
         name,
+        description,
         latitude: latitude !== null ? { set: latitude } : {},
         longitude: longitude !== null ? { set: longitude } : {},
         images: {

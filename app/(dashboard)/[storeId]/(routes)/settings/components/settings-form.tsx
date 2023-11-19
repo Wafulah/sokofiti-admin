@@ -10,6 +10,7 @@ import { Store, Image } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -55,8 +56,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
-
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
@@ -231,6 +230,24 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
               )}
             />
           </div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    disabled={loading}
+                    placeholder="Product description"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button disabled={loading} className="ml-auto" type="submit">
             Save changes
           </Button>
