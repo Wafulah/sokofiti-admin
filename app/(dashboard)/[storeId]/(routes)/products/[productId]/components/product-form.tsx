@@ -112,7 +112,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           `/api/${params.storeId}/products/${params.productId}`,
           data
         );
-        toast.success( `Data: ${data}`);
+        toast.success( `Data: ${data.quantity}`);
       } else {
         await axios.post(`/api/${params.storeId}/products`, data);
       }
