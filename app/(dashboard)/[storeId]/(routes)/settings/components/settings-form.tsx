@@ -31,7 +31,7 @@ import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
   name: z.string().min(2),
-  description: z.string().min(2),
+  description: z.string().min(5).nullable(),
   images: z.object({ url: z.string() }).array(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
