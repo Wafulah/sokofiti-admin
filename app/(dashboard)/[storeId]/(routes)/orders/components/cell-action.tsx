@@ -3,9 +3,9 @@
 import axios from "axios";
 import {
   LuCopy as Copy ,
-  LuPencil as Edit ,
+  LuEye as More ,
   LuMoreHorizontal as MoreHorizontal ,
-  LuTrash2 as Trash ,
+  LuPackageCheck as Delivered ,
 } from "react-icons/lu";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -78,12 +78,12 @@ export const CellAction: React.FC<CellActionProps> = ({
           <DropdownMenuItem
             onClick={() => router.push(`/${params.storeId}/orders/${data.id}`)}
           >
-            <Edit className="mr-2 h-4 w-4" />View
+            <More className="mr-2 h-4 w-4" />View
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setOpen(true)}
           >
-            <Trash className="mr-2 h-4 w-4" /> Delivered
+            <Delivered className="mr-2 h-4 w-4" /> Delivered
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
