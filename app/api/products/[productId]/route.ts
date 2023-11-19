@@ -121,7 +121,7 @@ export async function PATCH(
     if (!price) {
       return new NextResponse("Price is required", { status: 400 });
     }
-    if (quantity) {
+    if (!quantity) {
       return new NextResponse(`Quantity "${quantity}" is not a valid integer. Type: ${typeof quantity}`, { status: 400 });
     }
     if (!description) {
