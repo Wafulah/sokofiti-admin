@@ -151,6 +151,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
+    const quantityAsInt = parseInt(quantity, 10);
     await prismadb.product.update({
       where: {
         id: params.productId,
@@ -158,7 +159,7 @@ export async function PATCH(
       data: {
         name,
         price,
-        quantity,
+        quantityAsInt,
         description,
         categoryId,
         colorId,

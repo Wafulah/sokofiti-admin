@@ -63,7 +63,7 @@ model Product {
   name        String
   price       Decimal
   quantity    Int?
-  description String?
+  description String?   @db.LongText
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
   sizeId      String    // Foreign Key to Size
