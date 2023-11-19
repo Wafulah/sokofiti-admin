@@ -22,8 +22,8 @@ model Store {
   images          Image[]   // Relation to Image model
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
-  latitude        Decimal?   
-  longitude       Decimal? 
+  latitude        Float?   
+  longitude       Float? 
 }
 
 model Billboard {

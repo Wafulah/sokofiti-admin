@@ -31,6 +31,7 @@ import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
   name: z.string().min(2),
+  description: z.string().min(2),
   images: z.object({ url: z.string() }).array(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
@@ -54,6 +55,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
