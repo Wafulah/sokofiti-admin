@@ -88,7 +88,7 @@ export async function PATCH(
     const { userId } = auth();
 
     const body = await req.json();
-
+    console.log(body);
     const {
       name,
       price,
