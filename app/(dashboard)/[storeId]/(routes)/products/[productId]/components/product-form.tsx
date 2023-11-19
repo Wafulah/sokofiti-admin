@@ -112,6 +112,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           `/api/${params.storeId}/products/${params.productId}`,
           data
         );
+        toast.success( `Data: ${data}`);
       } else {
         await axios.post(`/api/${params.storeId}/products`, data);
       }
@@ -392,7 +393,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      placeholder="Product name"
+                      placeholder="Product description"
                       {...field}
                     />
                   </FormControl>
