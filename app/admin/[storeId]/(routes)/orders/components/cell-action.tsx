@@ -76,7 +76,7 @@ export const CellAction: React.FC<CellActionProps> = ({
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/orders/${data.id}`)}
+            onClick={() => router.push(`/admin/${params.storeId}/orders/${data.id}`)}
           >
             <More className="mr-2 h-4 w-4" />View
           </DropdownMenuItem>
