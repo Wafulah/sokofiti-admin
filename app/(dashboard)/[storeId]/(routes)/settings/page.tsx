@@ -26,10 +26,15 @@ const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
     redirect("/");
   }
 
+  
+  const categories = await prismadb.category.findMany();
+  
+  const counties = await prismadb.county.findMany();
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <SettingsForm initialData={store} />
+        <SettingsForm initialData={store} categories={categories} counties={counties} />
       </div>
     </div>
   );

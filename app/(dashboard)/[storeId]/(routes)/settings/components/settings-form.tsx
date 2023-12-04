@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { LuTrash2 as Trash } from "react-icons/lu";
-import { Store, Image } from "@prisma/client";
+import { Store, Image, Category, County } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,6 +23,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
@@ -33,6 +40,8 @@ import ImageUpload from "@/components/ui/image-upload";
 const formSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(5).nullable(),
+  categoryId: z.string().min(1),
+  countyId: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
@@ -44,9 +53,15 @@ interface SettingsFormProps {
   initialData: Store & {
     images: Image[];
   };
+  counties: County[];
+  categories: Category[];
 }
 
-export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
+export const SettingsForm: React.FC<SettingsFormProps> = ({
+  initialData,
+  categories,
+  counties,
+}) => {
   const params = useParams();
   const router = useRouter();
   const origin = useOrigin();
@@ -226,6 +241,70 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                       }}
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="countyId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>County</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a category"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {counties.map((county) => (
+                        <SelectItem key={county.id} value={county.id}>
+                          {county.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a category"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
