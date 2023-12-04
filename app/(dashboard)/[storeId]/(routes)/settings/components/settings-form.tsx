@@ -260,7 +260,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       <SelectTrigger>
                         <SelectValue
                           defaultValue={field.value}
-                          placeholder="Select a category"
+                          placeholder="Select a county"
                         />
                       </SelectTrigger>
                     </FormControl>
