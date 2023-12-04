@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { LuTrash2 as Trash } from "react-icons/lu";
-import { Billboard, Category } from "@prisma/client"
+import { County } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
@@ -27,19 +27,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const formSchema = z.object({
   name: z.string().min(2),
-  billboardId: z.string().min(1),
 });
 
-type CategoryFormValues = z.infer<typeof formSchema>
+type CountyFormValues = z.infer<typeof formSchema>
 
-interface CategoryFormProps {
-  initialData: Category | null;
-  billboards: Billboard[];
+interface CountyFormProps {
+  initialData: County | null;
 };
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({
+export const CountyForm: React.FC<CountyFormProps> = ({
   initialData,
-  billboards
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -47,26 +44,25 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit category' : 'Create category';
-  const description = initialData ? 'Edit a category.' : 'Add a new category';
-  const toastMessage = initialData ? 'Category updated.' : 'Category created.';
+  const title = initialData ? 'Edit county' : 'Create county';
+  const description = initialData ? 'Edit a county.' : 'Add a new county';
+  const toastMessage = initialData ? 'County updated.' : 'County created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<CategoryFormValues>({
+  const form = useForm<CountyFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: '',
-      billboardId: '',
     }
   });
 
-  const onSubmit = async (data: CategoryFormValues) => {
+  const onSubmit = async (data: CountyFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/categories/${params.categoryId}`, data);
+        await axios.patch(`/api/${params.storeId}/counties/${params.countyId}`, data);
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, data);
+        await axios.post(`/api/${params.storeId}/counties`, data);
       }
       router.refresh();
       router.push(`/${params.storeId}/categories`);
@@ -81,12 +77,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/categories/${params.categoryId}`);
+      await axios.delete(`/api/${params.storeId}/counties/${params.countyId}`);
       router.refresh();
-      router.push(`/${params.storeId}/categories`);
-      toast.success('Category deleted.');
+      router.push(`/${params.storeId}/counties`);
+      toast.success('County deleted.');
     } catch (error: any) {
-      toast.error('Make sure you removed all products using this category first.');
+      toast.error('Make sure you removed all Stores using this countyy first.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -125,34 +121,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Category name" {...field} />
+                    <Input disabled={loading} placeholder="County name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="billboardId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Billboard</FormLabel>
-                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue defaultValue={field.value} placeholder="Select a billboard" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {billboards.map((billboard) => (
-                        <SelectItem key={billboard.id} value={billboard.id}>{billboard.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
