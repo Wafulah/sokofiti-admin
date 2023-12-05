@@ -26,18 +26,18 @@ export async function POST(
       return new NextResponse("Store id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
+    // const storeByUserId = await prismadb.store.findFirst({
+    //   where: {
+    //     id: params.storeId,
+    //     userId,
+    //   },
+    // });
 
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 405 });
-    }
+    // if (!storeByUserId) {
+    //   return new NextResponse("Unauthorized", { status: 405 });
+    // }
 
-    
+
     const county = await prismadb.county.create({
       data: {
         name,
