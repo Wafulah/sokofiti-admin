@@ -51,8 +51,8 @@ import ImageUpload from "@/components/ui/image-upload";
 const formSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(5).nullable(),
-  categories: z.array(z.object({ name: z.string() })),
-  counties: z.array(z.object({ name: z.string() })),
+  categories: z.array(z.object({ id: z.string() })),
+  counties: z.array(z.object({ id: z.string() })),
   images: z.object({ url: z.string() }).array(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
@@ -276,14 +276,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             key={county.id}
                             checked={(field.value || []).some(
                               (selectedCounty) =>
-                                selectedCounty.name === county.name
+                                selectedCounty.id === county.id
                             )}
                             onCheckedChange={(checked) => {
                               const updatedValue = checked
                                 ? [...(field.value || []), county]
                                 : (field.value || []).filter(
                                     (selectedCounty) =>
-                                      selectedCounty.name !== county.name
+                                      selectedCounty.id !== county.id
                                   );
                               field.onChange(updatedValue);
                             }}
@@ -315,14 +315,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             key={category.id}
                             checked={(field.value || []).some(
                               (selectedCategory) =>
-                                selectedCategory.name === category.name
+                                selectedCategory.id === category.id
                             )}
                             onCheckedChange={(checked) => {
                               const updatedValue = checked
                                 ? [...(field.value || []), category]
                                 : (field.value || []).filter(
                                     (selectedCategory) =>
-                                      selectedCategory.name !== category.name
+                                      selectedCategory.id !== category.id
                                   );
                               field.onChange(updatedValue);
                             }}
