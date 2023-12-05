@@ -63,7 +63,7 @@ export const CountyForm: React.FC<CountyFormProps> = ({
         await axios.post(`/api/${params.storeId}/counties`, data);
      
       router.refresh();
-      router.push(`/${params.storeId}/counties`);
+      router.push(`admin/${params.storeId}/counties`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error('Something went wrong.');
