@@ -280,8 +280,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             )}
                             onCheckedChange={(checked) => {
                               const updatedValue = checked
-                                ? [...field.value, county]
-                                : field.value.filter(
+                                ? [...(field.value || []), county]
+                                : (field.value || []).filter(
                                     (selectedCounty) =>
                                       selectedCounty.name !== county.name
                                   );
