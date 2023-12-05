@@ -16,8 +16,8 @@ export async function PATCH(
       longitude,
       images,
       description,
-      categoryId,
-      countyId,
+      categories,
+      counties,
     } = body;
 
     if (!userId) {
@@ -35,11 +35,15 @@ export async function PATCH(
     const updateData = {
       name,
       description,
-      categoryId,
-      countyId,
       ...(latitude !== null ? { latitude } : {}),
       ...(longitude !== null ? { longitude } : {}),
       images: {
+        deleteMany: {},
+      },
+      categories: {
+        deleteMany: {},
+      },
+      counties: {
         deleteMany: {},
       },
     };
@@ -51,11 +55,15 @@ export async function PATCH(
       data: {
         name,
         description,
-        categoryId,
-        countyId,
         latitude: latitude !== null ? { set: latitude } : {},
         longitude: longitude !== null ? { set: longitude } : {},
         images: {
+          deleteMany: {},
+        },
+        categories: {
+          deleteMany: {},
+        },
+        counties: {
           deleteMany: {},
         },
       },
@@ -70,6 +78,16 @@ export async function PATCH(
           createMany: {
             data: [...images.map((image: { url: string }) => image)],
           },
+        },
+        categories: {
+          set: categories.map((category: { name: string }) => ({
+            name: category.name,
+          })),
+        },
+        counties: {
+          set: counties.map((county: { name: string }) => ({
+            name: county.name,
+          })),
         },
       },
     });

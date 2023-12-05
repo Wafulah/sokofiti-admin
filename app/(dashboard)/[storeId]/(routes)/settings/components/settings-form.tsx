@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +31,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
@@ -40,8 +51,8 @@ import ImageUpload from "@/components/ui/image-upload";
 const formSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(5).nullable(),
-  categoryId: z.string().min(1),
-  countyId: z.string().min(1),
+  categories: z.array(z.object({ name: z.string() })),
+  counties: z.array(z.object({ name: z.string() })),
   images: z.object({ url: z.string() }).array(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
@@ -57,6 +68,8 @@ interface SettingsFormProps {
   categories: Category[];
 }
 
+type Checked = DropdownMenuCheckboxItemProps["checked"];
+
 export const SettingsForm: React.FC<SettingsFormProps> = ({
   initialData,
   categories,
@@ -69,8 +82,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
+  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
+  const [showPanel, setShowPanel] = React.useState<Checked>(false);
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
@@ -244,66 +258,77 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="countyId"
+              name="counties"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>County</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a county"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">Select</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
                       {counties.map((county) => (
-                        <SelectItem key={county.id} value={county.id}>
+                        <DropdownMenuCheckboxItem
+                          key={county.id}
+                          checked={field.value.some(
+                            (selectedCounty) =>
+                              selectedCounty.name === county.name
+                          )}
+                          onCheckedChange={(checked) => {
+                            const updatedValue = checked
+                              ? [...field.value, county]
+                              : field.value.filter(
+                                  (selectedCounty) =>
+                                    selectedCounty.name !== county.name
+                                );
+                            field.onChange(updatedValue);
+                          }}
+                        >
                           {county.name}
-                        </SelectItem>
+                        </DropdownMenuCheckboxItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="categoryId"
+              name="categories"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a category"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
+                  <FormLabel>Categories</FormLabel>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">Select</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
                       {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
+                        <DropdownMenuCheckboxItem
+                          key={category.id}
+                          checked={field.value.some(
+                            (selectedCategory) =>
+                              selectedCategory.name === category.name
+                          )}
+                          onCheckedChange={(checked) => {
+                            const updatedValue = checked
+                              ? [...field.value, category]
+                              : field.value.filter(
+                                  (selectedCategory) =>
+                                    selectedCategory.name !== category.name
+                                );
+                            field.onChange(updatedValue);
+                          }}
+                        >
                           {category.name}
-                        </SelectItem>
+                        </DropdownMenuCheckboxItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <FormMessage />
                 </FormItem>
               )}
