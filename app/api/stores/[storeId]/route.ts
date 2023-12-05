@@ -77,9 +77,9 @@ export async function PATCH(
             name: county.name,
           })),
         },
+        billboards: undefined,
       },
     });
-    
 
     return NextResponse.json(store);
   } catch (error) {
