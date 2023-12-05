@@ -27,7 +27,7 @@ export const CountiesClient: React.FC<CountiesClientProps> = ({ data }) => {
           title={`Counties (${data.length})`}
           description="Manage counties for your store"
         />
-        <Button onClick={() => router.push(`/${params.storeId}/counties/new`)}>
+        <Button onClick={() => router.push(`/${params.storeId}/new-county`)}>
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>
