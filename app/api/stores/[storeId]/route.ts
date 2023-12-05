@@ -40,12 +40,6 @@ export async function PATCH(
       images: {
         deleteMany: {},
       },
-      categories: {
-        deleteMany: {},
-      },
-      counties: {
-        deleteMany: {},
-      },
     };
 
     await prismadb.store.update({
@@ -58,12 +52,6 @@ export async function PATCH(
         latitude: latitude !== null ? { set: latitude } : {},
         longitude: longitude !== null ? { set: longitude } : {},
         images: {
-          deleteMany: {},
-        },
-        categories: {
-          deleteMany: {},
-        },
-        counties: {
           deleteMany: {},
         },
       },
