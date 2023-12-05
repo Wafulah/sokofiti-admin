@@ -68,17 +68,18 @@ export async function PATCH(
           },
         },
         categories: {
-          set: categories.map((category: { name: string }) => ({
+          create: categories.map((category: { name: string }) => ({
             name: category.name,
           })),
         },
         counties: {
-          set: counties.map((county: { name: string }) => ({
+          create: counties.map((county: { name: string }) => ({
             name: county.name,
           })),
         },
       },
     });
+    
 
     return NextResponse.json(store);
   } catch (error) {
