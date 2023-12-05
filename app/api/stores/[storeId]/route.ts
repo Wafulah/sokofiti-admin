@@ -77,7 +77,6 @@ export async function PATCH(
             name: county.name,
           })),
         },
-        billboards: undefined,
       },
     });
 
