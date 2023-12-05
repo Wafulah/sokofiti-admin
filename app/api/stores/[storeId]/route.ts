@@ -57,6 +57,12 @@ export async function PATCH(
       },
     });
 
+    const existingBillboards = await prismadb.billboard.findMany({
+      where: {
+        storeId: process.env.NEXT_PUBLIC_ADMIN,
+      },
+    });
+
     const store = await prismadb.store.update({
       where: {
         id: params.storeId,
@@ -76,6 +82,9 @@ export async function PATCH(
           create: counties.map((county: { name: string }) => ({
             name: county.name,
           })),
+        },
+        billboards: {
+          set: existingBillboards.map((billboard) => ({ id: billboard.id })),
         },
       },
     });
