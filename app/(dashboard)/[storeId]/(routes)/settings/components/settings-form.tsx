@@ -265,32 +265,35 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>County</FormLabel>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline">Select</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                      {counties.map((county) => (
-                        <DropdownMenuCheckboxItem
-                          key={county.id}
-                          checked={(field.value || []).some(
-                            (selectedCounty) => selectedCounty.name === county.name
-                          )}
-                          onCheckedChange={(checked) => {
-                            const updatedValue = checked
-                              ? [...field.value, county]
-                              : field.value.filter(
-                                  (selectedCounty) =>
-                                    selectedCounty.name !== county.name
-                                );
-                            field.onChange(updatedValue);
-                          }}
-                        >
-                          {county.name}
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <FormControl>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">Select</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        {counties.map((county) => (
+                          <DropdownMenuCheckboxItem
+                            key={county.id}
+                            checked={(field.value || []).some(
+                              (selectedCounty) =>
+                                selectedCounty.name === county.name
+                            )}
+                            onCheckedChange={(checked) => {
+                              const updatedValue = checked
+                                ? [...field.value, county]
+                                : field.value.filter(
+                                    (selectedCounty) =>
+                                      selectedCounty.name !== county.name
+                                  );
+                              field.onChange(updatedValue);
+                            }}
+                          >
+                            {county.name}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -301,33 +304,35 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categories</FormLabel>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline">Select</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                      {categories.map((category) => (
-                        <DropdownMenuCheckboxItem
-                          key={category.id}
-                          checked={(field.value || []).some(
-                            (selectedCategory) =>
-                              selectedCategory.name === category.name
-                          )}
-                          onCheckedChange={(checked) => {
-                            const updatedValue = checked
-                              ? [...field.value, category]
-                              : field.value.filter(
-                                  (selectedCategory) =>
-                                    selectedCategory.name !== category.name
-                                );
-                            field.onChange(updatedValue);
-                          }}
-                        >
-                          {category.name}
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <FormControl>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">Select</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        {categories.map((category) => (
+                          <DropdownMenuCheckboxItem
+                            key={category.id}
+                            checked={(field.value || []).some(
+                              (selectedCategory) =>
+                                selectedCategory.name === category.name
+                            )}
+                            onCheckedChange={(checked) => {
+                              const updatedValue = checked
+                                ? [...field.value, category]
+                                : field.value.filter(
+                                    (selectedCategory) =>
+                                      selectedCategory.name !== category.name
+                                  );
+                              field.onChange(updatedValue);
+                            }}
+                          >
+                            {category.name}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
