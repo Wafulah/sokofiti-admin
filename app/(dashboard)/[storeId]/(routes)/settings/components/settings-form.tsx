@@ -273,9 +273,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       {counties.map((county) => (
                         <DropdownMenuCheckboxItem
                           key={county.id}
-                          checked={field.value.some(
-                            (selectedCounty) =>
-                              selectedCounty.name === county.name
+                          checked={(field.value || []).some(
+                            (selectedCounty) => selectedCounty.name === county.name
                           )}
                           onCheckedChange={(checked) => {
                             const updatedValue = checked
@@ -310,7 +309,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       {categories.map((category) => (
                         <DropdownMenuCheckboxItem
                           key={category.id}
-                          checked={field.value.some(
+                          checked={(field.value || []).some(
                             (selectedCategory) =>
                               selectedCategory.name === category.name
                           )}
