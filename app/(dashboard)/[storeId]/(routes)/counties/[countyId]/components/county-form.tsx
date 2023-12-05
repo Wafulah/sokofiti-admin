@@ -69,7 +69,7 @@ export const CountyForm: React.FC<CountyFormProps> = ({
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error('Something went wrong.');
-      alert(error);
+      
     } finally {
       setLoading(false);
     }
