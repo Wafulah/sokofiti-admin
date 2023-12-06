@@ -3,8 +3,6 @@ import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
-
-
 export async function PATCH(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -70,10 +68,14 @@ export async function PATCH(
           },
         },
         categories: {
-          connect: categories.map((category: { id: string }) => ({ id: category.id })),
+          connect: categories.map((category: { id: string }) => ({
+            id: category.id,
+          })),
         },
         counties: {
-          connect: counties.map((county: { id: string }) => ({ id: county.id })),
+          connect: counties.map((county: { id: string }) => ({
+            id: county.id,
+          })),
         },
       },
     });
@@ -139,6 +141,8 @@ export async function GET(
       },
       include: {
         images: true,
+        counties: true,
+        categories: true,
         products: {
           include: {
             images: true,
